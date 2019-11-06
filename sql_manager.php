@@ -35,6 +35,18 @@ function saveUser($email, $name, $password) {
     return $result;
 }
 
+function categories() {
+    $db = connect();
+    $sql = 'DESCRIBE products tags';
+    $result = mysqli_fetch_assoc(mysqli_query($db, $sql));
+    $result = str_replace('set(', '', $result['Type']);
+    $result = str_replace(')', '', $result);
+    $result = str_replace('\'', '', $result);
+    $result = explode(',', $result);
+    mysqli_close($db);
+    return $result;
+}
+
 function getProductByCat($category) {
     $db = connect();
     $category = mysqli_real_escape_string($db, $category);
@@ -55,6 +67,7 @@ function getProductByID($id) {
 
 function getMostSold($howmany) {
     $db = connect();
+    $howmany = mysqli_real_escape_string($db, $howmany);
     $sql = "SELECT order_products.product_id, SUM(order_products.product_amount) AS total, products.name 
             FROM order_products 
             LEFT JOIN products ON order_products.product_id = products.id 
@@ -77,6 +90,7 @@ function saveOrdered($total, $products, $customer_id) {
     $order_id = mysqli_insert_id($db);
     foreach ($products as $id=>$amount) {
         $product_id = mysqli_real_escape_string($db, $id);
+        $amount = mysqli_real_escape_string($db, $amount);
         $sql = 'INSERT INTO order_products (order_id, product_id, product_amount) VALUES ('.$order_id.', '.$product_id.', '.$amount.')';
         mysqli_query($db, $sql);
     }

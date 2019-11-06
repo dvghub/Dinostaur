@@ -2,17 +2,19 @@
 
 function showBodySection($data) {
     include 'menu.php';
-    echo '<body>';
+    include 'javascript.php';
+    echo '<body class="col-12 col-md-10 col-lg-8 px-0 mx-md-auto pb-5 text-dark">';
     showHeader($data);
     showMenu($data);
     showContent($data);
     showFooter();
+    showScripts();
     echo '</body>';
 }
 
 function showHeader($data){
-    echo '<header>';
-    echo $data['page'] != 'details' ? '<h1>'.$data['page'].'</h1>' : '<h1>'.$data['product_name'].'</h1>';
+    echo "<header class='d-none d-md-block text-center'>";
+    echo $data['page'] != 'details' ? '<h1 class="text-uppercase">'.$data['page'].'</h1>' : '<h1 class="text-uppercase">'.$data['product_name'].'</h1>';
     echo '</header>';
 }
 
@@ -21,6 +23,10 @@ function showContent($data) {
         case 'home':
             include 'home.php';
             showHomeContent();
+            break;
+        case 'top':
+            include 'top.php';
+            showTopSold();
             break;
         case 'dinostaur':
             include 'dinostaur.php';
@@ -65,8 +71,8 @@ function showContent($data) {
 }
 
 function showFooter() {
-    echo "    <div id='footer-line'></div>
-    <footer>&copy;2019 dvg</footer>";
+    echo "<div id='footer-line' class='col-12 col-md-10 col-lg-8 mx-auto px-0 position-fixed bg-cornflower height-5'></div>
+          <footer class='col-12 col-md-10 col-lg-8 mx-auto position-fixed px-1 py-1 bg-dark text-white text-right'>&copy;2019 dvg</footer>";
 }
 
 function showError($error) {
@@ -74,7 +80,11 @@ function showError($error) {
 }
 
 function showMessage($message) {
-    echo "
-        <span id='alert'>".$message."</span>
-    ";
+    echo "<span class='d-block col-12 border border-danger text-danger text-center my-3'>".$message."</span>";
+}
+
+function debugPrint($stuff) {
+    echo '<pre>';
+    print_r($stuff);
+    echo '</pre>';
 }

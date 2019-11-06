@@ -40,6 +40,16 @@ function authUser($email, $password) {
     }
 };
 
+function getCategories() {
+    try {
+        return categories();
+    } catch (Exception $e) {
+        showMessage("Couldn't connect to database. Please check your network connection.");
+        //Pseudo log($e->getMessage())
+        return false;
+    }
+}
+
 function getProducts($category) {
     try {
         return getProductByCat($category);

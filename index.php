@@ -36,9 +36,9 @@ function getRequestData() {
         $message = '';
         $password = '';
         $password2 = '';
-        $category = 'all';
+        $category = testInput(getUrlVar('category', 'all'));
         $product_id = testInput(getUrlVar('product_id', -1));
-        $product_name = '';
+        $product_name = testInput(getUrlVar('product_name', ''));
         $amount = 0;
         $amounts = array();
         $products = array();
@@ -111,6 +111,7 @@ function process($data) {
             return $data;
             break;
         case 'home':
+        case 'top':
         case 'dinostaur':
         case 'details':
         case 'about':

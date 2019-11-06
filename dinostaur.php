@@ -1,105 +1,71 @@
 <?php
 function showWsHomeContent($data) {
-    $logged = isUserLogged();
     $products = getProducts($data['category']);
-    showCategories();
 
-    $col1 = array();
-    $col2 = array();
-    $col3 = array();
-    $col4 = array();
-    $col = 1;
-
+    $categories = getCategories();
+    showCategories($categories);
     if ($products) {
-        foreach ($products as $product) {
-            $article = "<article id='".$product['id']."' class='tile'>";
-            $article .= "<img class='tile-thumbnail' src='".$product['image']. "'>
-                         <span class='tile-name'>" .$product['name']. "</span>
-                         <span class='tile-price'>&euro;" .$product['price']."</span>";
-                         if ($logged) {$article .= "
-                         <form action='index.php' method='post'>
-                             <input type='hidden' name='product_id' value='" . $product['id'] . "'>
-                             <input type='hidden' name='product_name' value='" . $product['name'] . "'>
-                             <input type='hidden' name='page' value='details'>
-                             <input type='submit' value='ORDER' class='tile-order'>
-                         </form>";
-                         }
-            $article .= "</article>";
-
-            switch ($col) {
-                case 1:
-                    array_push($col1, $article);
-                    $col += 1;
-                    break;
-                case 2:
-                    array_push($col2, $article);
-                    $col += 1;
-                    break;
-                case 3:
-                    array_push($col3, $article);
-                    $col += 1;
-                    break;
-                case 4:
-                    array_push($col4, $article);
-                    $col = 1;
-                    break;
-            }
-        }
-        showProducts(array($col1, $col2, $col3, $col4));
+        showProducts($products);
     }
 }
 
-function showCategories() { // ALERT
-    echo "<form method='post' action='index.php'>
-            <input type='hidden' name='page' value='dinostaur'>
-        <span id='categories'>Show: 
-            <select name='category' onchange='this.form.submit()'>
-                <option value='all' selected>All</option>
-                <option value='triassic'>Triassic period</option>
-                <option value='jurassic'>Jurassic period</option>
-                <option value='cretaceous'>Cretaceous period</option>
-                <option value='land'>Land creatures</option>
-                <option value='marine'>Marine creatures</option>
-                <option value='avian'>Avian creatures</option>
-                <option value='amphib'>Amphibians</option>
-                <option value='reptile'>Reptiles</option>
-                <option value='mammal'>Mammals</option>
-                <option value='bird'>Birds</option>
-                <option value='omni'>Omnivores</option>
-                <option value='herbi'>Herbivores</option>
-                <option value='carni'>Carnivores</option>
-            </select></span></form>";
+function showCategories($categories) {
+    echo "<form>
+        <input type='hidden' name='page' value='dinostaur'>
+        <span class='col-12 d-block mb-2'>Show: 
+            <select name='category' onchange='this.form.submit()'>";
+    foreach ($categories as $category) {
+        echo "<option value='".$category."' ".($category == 'all' ? 'selected' : '')."><span class='text-capitalize'>".$category."</span></option>";
+    }
+    echo "</select></span></form>";
 }
 
-function showProducts($cols) {
-    echo "<div class='row'>";
-    foreach ($cols as $col) {
-        echo    "<div class='col'>";
-        foreach ($col as $article) {
-            echo $article;
+function showProducts($products) {
+    echo "<div class='col-12 d-flex flex-wrap'>";
+    foreach ($products as $product) {
+        echo "<article class='col-12 col-sm-6 col-md-4 col-lg-3 float-left p-2 tile d-flex flex-wrap'>
+              <img class='col-12 mb-auto p-0' src='".$product['image']."'>
+              <span class='mt-auto col-12 d-flex flex-wrap p-0'>
+                  <span class='float-left clear-left font-weight-bold col-12'>" .$product['name']. "</span>
+                  <span class='float-left clear-left col-6'>&euro;" .$product['price']."</span>";
+        if (isUserLogged()) {
+            echo "<form action='index.php' method='post' class='col-6'>
+                      <input type='hidden' name='product_id' value='" . $product['id'] . "'>
+                      <input type='hidden' name='product_name' value='" . $product['name'] . "'>
+                      <input type='hidden' name='page' value='details'>
+                      <input type='submit' value='ORDER' class='tile-order float-right clear-right col-12 bg-cornflower text-decoration-none text-white border-0'>
+                  </form>";
         }
-        echo    '</div>';
+        echo '</span></article>';
     }
-    echo '</div>';
+    echo "</div>";
 }
 
 function showDetailsContent($data) {
+    include 'form.php';
     $product = getProduct($data['product_id']);
+    $tags = '';
 
     echo "
-    <img class='page-img' src='".$product['image']."'>
-    <span class='page-description'>" .$product['description']. "</span>
-    <span class='page-price'>&euro;" .$product['price']. "</span>";
+    <img class='float-left float-md-right col-12 col-md-6' src='".$product['image']."'>
+    <span class='text-justify float-left clear-left col-12 col-md-6'>" .$product['description']. "</span>";
+    foreach (explode(',', $product['tags']) as $id => $tag) {
+        $id == 0 ? $tags = '#' . $tag : $tags .= ', #' . $tag;
+    }
+    echo "
+    <span class='float-left clear-left font-weight-light col-12 col-md-6 font-italic'>".$tags."</span>
+    <span class='float-left clear-left font-weight-bold  col-12 col-md-6'>&euro;" .$product['price']. "</span>";
     if (isUserLogged()) {
         echo "
-    <form action='index.php' method='post'>
-        <input type='hidden' name='product_id' value='".$product['id']."'>
-        <input type='hidden' name='product_name' value='".$product['name']. "'>
-        <input type='hidden' name='page' value='order'>
-        <input type='number' name='amount' min='1' value='1' class='page-amount'>
-        <input type='submit' value='ORDER' class='page-order'>
-    </form>";
+        <form method='post' class='float-left clear-left col-12 col-md-6 mt-2'>
+        <input type='hidden' name='page' value='order'>";
+        showFormInput('product_id', '', 'input', 'hidden', $product['id'], '', false, '', false);
+        showFormInput('product_name', '', 'input', 'hidden', $product['name'], '', false, '', false);
+        echo "<input type='number' name='amount' min='1' value='1' class='float-left clear-left border-cornflower col-3' style='height: 40px;'>
+              <input type='submit' class='col-9 col-md-3 p-2 bg-cornflower text-decoration-none text-white border-0 float-left' value='ORDER'>
+          </form>";
     } else {
-        echo '<span class="page-description">Please log in to purchase.</span>';
+        echo "<span class='text-justify float-left clear-left col-12 col-md-6'>Please log in to purchase.</span>";
     }
+    echo "";
 }
