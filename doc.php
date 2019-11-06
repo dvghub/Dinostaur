@@ -2,11 +2,9 @@
 
 class Doc {
     protected $_model;
-    protected $_database;
 
-    public function __construct($model, $database) {
+    public function __construct($model) {
         $this->_model = $model;
-        $this->_database = $database;
     }
 
     private function beginDoc() {

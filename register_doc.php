@@ -2,8 +2,8 @@
 require_once 'Form_Doc.php';
 
 class Register_Doc extends Form_Doc {
-    public function __construct($model, $database) {
-        parent::__construct($model, $database);
+    public function __construct($model) {
+        parent::__construct($model);
     }
 
     protected function content() {

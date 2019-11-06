@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 21, 2019 at 04:24 AM
+-- Generation Time: Oct 25, 2019 at 02:59 AM
 -- Server version: 8.0.17
 -- PHP Version: 7.3.9
 
@@ -54,7 +54,8 @@ INSERT INTO `orders` (`id`, `customer_id`, `total_price`, `date`) VALUES
 (17, 2, 140, '2019-10-17'),
 (18, 2, 230, '2019-10-17'),
 (19, 1, 325, '2019-10-17'),
-(20, 2, 405, '2019-10-18');
+(20, 2, 405, '2019-10-18'),
+(21, 2, 595, '2019-10-22');
 
 -- --------------------------------------------------------
 
@@ -118,7 +119,11 @@ INSERT INTO `order_products` (`order_id`, `product_id`, `product_amount`, `id`) 
 (19, 13, 3, 49),
 (20, 28, 4, 50),
 (20, 22, 7, 51),
-(20, 13, 1, 52);
+(20, 13, 1, 52),
+(21, 28, 5, 53),
+(21, 19, 1, 54),
+(21, 17, 3, 55),
+(21, 18, 7, 56);
 
 -- --------------------------------------------------------
 
@@ -141,7 +146,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `image`, `price`, `description`, `tags`) VALUES
-(10, 'Eoraptor', 'img/eoraptor.jpg', 15, 'Earliest identified true dinosaur from middle Triassic period. Its name means \\\\\\\\\\\\\\\'dawn thief\\\\\\\\\\\\\\\'. It was a two-legged dinosaur, evolved from the middle Triassic period\\\\\\\\\\\\\\\'s archosaurs. Based on its heterodont teeth, it is believed to have been an omnivore. Despite its name, the Eoraptor is not a true raptor.', 'all,triassic,land,reptile,omni'),
+(10, 'Eoraptor', 'img/eoraptor.jpg', 15, 'Earliest identified true dinosaur from middle Triassic period. Its name means \'dawn thief\'. It was a two-legged dinosaur, evolved from the middle Triassic period\'s archosaurs. Based on its heterodont teeth, it is believed to have been an omnivore. Despite its name, the Eoraptor is not a true raptor.', 'all,triassic,land,reptile,omni'),
 (11, 'Nothosaurus', 'img/nothosaurus.jpg', 15, 'This \'fake lizard\' lived in oceans worldwide during the Triassic period. It was not as well-adapted to full-time aquatic life as later pliosaurs and plesiosaurs. It had nostrils, leading paleontologists to believe this animal spent at least some of its time on land. It\'s one of the most important marine reptiles on record, and many different species of Nothosaurus have been found all over the world.', 'all,triassic,reptile,amphib,carni'),
 (12, 'Diplodocus', 'img/diplodocus.jpg', 25, 'One of the biggest North American late Jurassic dinosaurs. More fossils have been found than of just about any other dinosaur. It is definitely the longest dinosaur to have ever lived, and it most likely used its long neck to sweep over the ground to find and eat shrubs and bushes. It\'s front legs were quite a big shorter than its hind legs, making it walk head-down, ass-high. Science isn\'t clear yet about why this might be the case. Its size was the only thing keeping it safe. It was barely smarter than the plants it ate, but the sheer mass of the thing meant it had no natural enemies as an adult.', 'all,jurassic,land,reptile,herbi'),
 (13, 'Troodon', 'img/troodon.jpg', 5, 'This small, bird-like dinosaur had the comparatively biggest brain of its time, making it about as smart as a chicken.', 'all,cretaceous,land,reptile'),
@@ -153,14 +158,19 @@ INSERT INTO `products` (`id`, `name`, `image`, `price`, `description`, `tags`) V
 (19, 'Eudimorphodon', 'img/eudimorphodon.jpg', 15, '[Something about dimorphic teeth]', 'all,triassic,avian,reptile,carni'),
 (20, 'Brachiosaurus', 'img/brachiosaurus.jpg', 100, '[Long misunderstood dude easily confused with giraffatitan or branchiosaurus]', 'all,jurassic,land,reptile,herbi'),
 (21, 'Allosaurus', 'img/allosaurus.jpg', 45, '[Less well known T. Rex-like theropod]', 'all,jurassic,land,reptile,carni'),
-(22, 'Archaeopteryx', 'img/archaeopteryx.jpg', 40, '[Tiny old not-quite birds.]', 'all,jurassic,avian,reptile,carni'),
+(22, 'Archaeopteryx', 'img/archaeopteryx.jpg', 150, '[Tiny old not-quite birds.]', 'all,jurassic,avian,reptile,carni'),
 (23, 'Quetzalcoatlus', 'img/quetzalcoatlus.jpg', 10, '[Big controversial birb]', 'all,cretaceous,land,avian,reptile,carni'),
 (24, 'Styracosaurus', 'img/styracosaurus.jpg', 95, '[Prehistoric punk cow]', 'all,cretaceous,land,reptile,herbi'),
 (25, 'Repenomamus', 'img/repenomamus.jpg', 40, '[Dinosaur-eating badass]', 'all,cretaceous,land,mammal,carni'),
 (26, 'Buitreraptor', 'img/buitreraptor.jpg', 35, '[Terror chicken]', 'all,cretaceous,land,reptile,carni'),
 (27, 'Stegoceras', 'img/stegoceras.jpg', 15, '[Bird goat]', 'all,cretaceous,land,reptile,herbi'),
-(28, 'Cryptoclidus', 'img/cryptoclidus', 30, '[Garbage fish.]', 'all,jurassic,marine,reptile,carni'),
-(30, 'Confuciusornis', 'img/confuciusornis.jpg', 65, '[Old crow]', 'all,cretaceous,avian,bird,omni');
+(28, 'Cryptoclidus', 'img/cryptoclidus.jpg', 30, '[Garbage fish.]', 'all,jurassic,marine,reptile,carni'),
+(30, 'Confuciusornis', 'img/confuciusornis.jpg', 65, '[Old crow]', 'all,cretaceous,avian,bird,omni'),
+(31, 'Triceratops', 'img/triceratops.jpg', 65, '[Triceratops.]', 'all,cretaceous,land,reptile,herbi'),
+(32, 'Thescelosaurus', 'img/thescelosaurus.jpg', 20, '[Wonderful lizard.]', 'all,cretaceous,land,reptile,herbi'),
+(33, 'Edmontonia', 'img/edmontonia.jpg', 15, '[Big armadillo.]', 'all,cretaceous,land,reptile,herbi'),
+(34, 'Riojasaurus', 'img/riojasaurus.jpg', 105, '[Another big lizard.]', 'all,cretaceous,land,reptile,omni'),
+(35, 'Sinraptor', 'img/sinraptor.jpg', 250, '[SIN RAPTOR (Chinese plunderer).]', 'all,cretaceous,land,reptile,herbi');
 
 -- --------------------------------------------------------
 
@@ -196,7 +206,8 @@ INSERT INTO `users` (`id`, `email`, `name`, `password`, `admin`) VALUES
 (13, 'namename@email.com', 'name', 'password', 0),
 (14, 'uwecu@nvrun.gnri', 'wueuowb', 'pass', 0),
 (15, 'person@email.com', 'new person', 'fantasticpassword', 0),
-(16, 'justin@solid-optics.eu', 'Michel', 'putetete', 0);
+(16, 'justin@solid-optics.eu', 'Michel', 'putetete', 0),
+(17, 'road@runner.com', 'road runner', 'meepmeep', 0);
 
 --
 -- Indexes for dumped tables
@@ -234,25 +245,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `order_products`
 --
 ALTER TABLE `order_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

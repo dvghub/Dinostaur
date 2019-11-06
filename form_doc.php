@@ -2,8 +2,8 @@
 require_once 'basic_doc.php';
 
 class Form_Doc extends Basic_Doc {
-    public function __construct($model, $database) {
-        parent::__construct($model, $database);
+    public function __construct($model) {
+        parent::__construct($model);
     }
 
     protected function content() {}

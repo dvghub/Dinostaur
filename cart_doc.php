@@ -2,8 +2,8 @@
 require_once 'Form_Doc.php';
 
 class Cart_Doc extends Form_Doc {
-    public function __construct($model, $database) {
-        parent::__construct($model, $database);
+    public function __construct($model) {
+        parent::__construct($model);
     }
 
     protected function content() {
@@ -19,13 +19,13 @@ class Cart_Doc extends Form_Doc {
                 } else {
                     $quantity = $amount;
                 }
-                $product = getProduct($this->_database, $id);
+                $product = $this->_model->getDb()->getProduct($id);
                 $total += $quantity * $product['price'];
                 $this->showProduct($product, $quantity, $id);
             }
             echo "<span class='float-right clear-right d-block font-larger font-weight-bolder mt-3'>Your total: &euro;".$total."</span>";
             $this->showFormEnd('float-left clear-left d-block col-6 col-md-5 col-xl-3 bg-dark text-white border-0 mt-3 mx-auto', 'UPDATE PRICES');
-            $this->showOrder('order received', $items, $total, userByEmail($this->_database, getLoggedEmail())['id']);
+            $this->showOrder('order received', $items, $total, $this->_model->getDb()->userByEmail(getLoggedEmail())['id']);
         } else {
             $this->showMessage('Please add items to your cart.');
         }

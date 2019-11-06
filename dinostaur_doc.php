@@ -2,18 +2,15 @@
 require_once 'Basic_Doc.php';
 
 class Dinostaur_Doc extends Basic_Doc {
-    public function __construct($model, $database) {
-        parent::__construct($model, $database);
+    public function __construct($model) {
+        parent::__construct($model);
     }
 
     protected function content() {
-        $products = getProducts($this->_database, $this->_model->getCategory());
-        $categories = getCategories($this->_database);
+        $products = $this->_model->getDb()->getProducts($this->_model->getCategory());
+        $categories = $this->_model->getDb()->getCategories();
         $this->showCategories($categories);
-
-        if ($products) {
-            $this->showProducts($products);
-        }
+        $this->showProducts($products);
     }
 
     private function showCategories($categories) {
@@ -22,7 +19,8 @@ class Dinostaur_Doc extends Basic_Doc {
                   <span class='col-12 d-block mb-2'>Show: 
                   <select name='category' onchange='this.form.submit()'>";
         foreach ($categories as $category) {
-            echo "<option value='".$category."' ".($category == 'all' ? 'selected' : '')."><span class='text-capitalize'>".$category."</span></option>";
+            $selected = $category == $this->_model->getCategory();
+            echo "<option value='".$category."' ".($selected ? 'selected' : '')."><span class='text-capitalize'>".$category."</span></option>";
         }
         echo "</select></span></form>";
     }

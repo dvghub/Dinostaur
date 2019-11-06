@@ -32,7 +32,7 @@ class User_Model extends Model {
 
         if (!empty($this->email) && !empty($this->password)) {
             if ($this->validateEmail($this->email)) {
-                $result = authUser($this->db, $this->email, $this->password);
+                $result = $this->db->authUser($this->email, $this->password);
                 switch ($result['status']) {
                     case 'user_unknown':
                         $this->error_email = 'This email is not in our database. Please try again or register.';
@@ -43,7 +43,7 @@ class User_Model extends Model {
                     case 'all_good':
                         $this->name = $result['name'];
                         try {
-                            loginUser($this->email, isAdmin($this->db, $this->email));
+                            loginUser($this->email, $this->db->isAdmin($this->email));
                         } catch (Exception $e) {
                             $this->alert = 'Connection to database failed. Please try again or contact the site\'s administrator.';
                         }
@@ -71,9 +71,9 @@ class User_Model extends Model {
             if ($this->validateEmail($this->email)) {
                 if ($this->password == $this->password2) {
                     try {
-                        $user = userByEmail($this->db, $this->email);
+                        $user = $this->db->userByEmail($this->email);
                         if (!$user) {
-                            if (save($this->db, $this->email, $this->name, $this->password)) {
+                            if ($this->db->save($this->email, $this->name, $this->password)) {
                                 $this->page = 'login';
                             } else {
                                 $this->error_name = "Something went wrong. Please try again.";

@@ -2,8 +2,8 @@
 require_once 'Doc.php';
 
 class Basic_Doc extends Doc {
-    public function __construct($model, $database) {
-        parent::__construct($model, $database);
+    public function __construct($model) {
+        parent::__construct($model);
     }
 
     private function title() {
@@ -38,7 +38,7 @@ class Basic_Doc extends Doc {
             if (isUserAdmin()) {
                 $this->showMenuItem('upload', 'UPLOAD', $this->_model->getPage());
             }
-            $this->showMenuItem('logout', 'LOG OUT ', $this->_model->getPage(), strtoupper(userByEmail($this->_database, getLoggedEmail())['name']));
+            $this->showMenuItem('logout', 'LOG OUT ', $this->_model->getPage(), strtoupper($this->_model->getDb()->userByEmail(getLoggedEmail())['name']));
             $this->showMenuItem('cart', 'CART (' . (cartExists() ? getAmountInCart() : 0) . ' ITEMS)', $this->_model->getPage(), '', true);
         } else {
             $this->showMenuItem('login', 'LOG IN', $this->_model->getPage());
@@ -89,5 +89,11 @@ class Basic_Doc extends Doc {
 
     protected function showMessage($message) {
         echo "<span class='col-12 text-center d-block border border-danger text-danger'>".$message.'</span>';
+    }
+
+    protected function debugPrint($stuff) {
+        echo '<pre>';
+        print_r($stuff);
+        echo '</pre>';
     }
 }

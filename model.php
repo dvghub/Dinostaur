@@ -46,8 +46,8 @@ class Model {
     public function setModel() {
         if ($this->type == 'POST') {
             $this->page = $this->testInput($this->getPostVar('page', 'home'));
+            $this->alert = $this->testInput($this->getPostVar('alert', ''));
             $this->name = $this->testInput($this->getPostVar('name', ''));
-            $this->name = $this->testInput($this->getPostVar('alert', ''));
             $this->email = $this->testInput($this->getPostVar('email', ''));
             $this->message = $this->testInput($this->getPostVar('message', ''));
             $this->password = $this->testInput($this->getPostVar('password', ''));
@@ -73,6 +73,10 @@ class Model {
             $this->product_id = $this->testInput($this->getUrlVar('product_id', -1));
             $this->product_name = $this->testInput($this->getUrlVar('product_name', ''));
         }
+    }
+
+    public function getType() {
+        return $this->type;
     }
 
     public function getPage() {
@@ -152,7 +156,7 @@ class Model {
     }
 
     public function getErrorUploadImage() {
-        return $this->name;
+        return $this->error_upload_image;
     }
 
     public function getUploadPrice() {
@@ -169,6 +173,10 @@ class Model {
 
     public function getErrorUploadDescription() {
         return $this->error_upload_description;
+    }
+
+    public function getDb() {
+        return $this->db;
     }
 
     private function getPostVar($key, $default='') {

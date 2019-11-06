@@ -1,8 +1,8 @@
 <?php
 require_once 'Basic_Doc.php';
 class Contact_Received_Doc extends Basic_Doc {
-    public function __construct($model, $database) {
-        parent::__construct($model, $database);
+    public function __construct($model) {
+        parent::__construct($model);
     }
 
     protected function content() {
