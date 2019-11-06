@@ -1,276 +1,51 @@
 <?php 
 session_start();
 
-include 'html.php';
-include 'body.php';
-include 'validation.php';
 include 'manager_manager.php';
 include 'session_manager.php';
+include_once 'database.php';
+include_once 'view.php';
+include_once 'model.php';
+include_once 'user_model.php';
+include_once 'store_model.php';
+include_once 'controller.php';
+include_once 'user_controller.php';
+include_once 'store_controller.php';
 
-$data = getRequestData();
-$data = process($data);
-showRequestedPage($data);
-
-function getRequestData() {
-    $request_type = $_SERVER['REQUEST_METHOD'];
-    
-    if ($request_type == 'POST') {
-        $requested_page = testInput(getPostVar('page', 'home'));
-        $name = testInput(getPostVar('name', ''));
-        $email = testInput(getPostVar('email', ''));
-        $message = testInput(getPostVar('message', ''));
-        $password = testInput(getPostVar('password', ''));
-        $password2 = testInput(getPostVar('password2', ''));
-        $category = testInput(getPostVar('category', 'all'));
-        $product_id = testInput(getPostVar('product_id', -1));
-        $product_name = testInput(getPostVar('product_name', ''));
-        $amount = testInput(getPostVar('amount', 0));
-        $amounts = array_key_exists('amounts', $_POST) ? $_POST['amounts'] : array();
-        $products = array_key_exists('products', $_POST) ? $_POST['products'] : array();
-        $categories = array_key_exists('categories', $_POST) ? $_POST['categories'] : array();
-        $total = testInput(getPostVar('total', 0));
-        $customer_id = testInput(getPostVar('customer_id', -1));
-        $upload_name = testInput(getPostVar('upload_name', ''));
-        $upload_image = testInput(getPostVar('upload_image', ''));
-        $upload_price = testInput(getPostVar('upload_price', 0));
-        $upload_description = testInput(getPostVar('upload_description', ''));
-        $time = testInput(getPostVar('time', 0));
-    } else {
-        $requested_page = testInput(getUrlVar('page', 'home'));
-        $name = '';
-        $email = '';
-        $message = '';
-        $password = '';
-        $password2 = '';
-        $category = testInput(getUrlVar('category', 'all'));
-        $product_id = testInput(getUrlVar('product_id', -1));
-        $product_name = testInput(getUrlVar('product_name', ''));
-        $amount = 0;
-        $amounts = array();
-        $products = array();
-        $categories = array();
-        $total = 0;
-        $customer_id = -1;
-        $upload_name = '';
-        $upload_image = '';
-        $upload_price = 0;
-        $upload_description = '';
-        $time = 0;
-    }
-    return array('page'=>$requested_page, 'type'=>$request_type, 'name'=>$name, 'email'=>$email, 'message'=>$message,
-        'password'=>$password, 'password2'=>$password2, 'category'=>$category, 'product_id'=>$product_id,
-        'product_name'=>$product_name, 'amount'=>$amount, 'amounts'=>$amounts, 'products'=>$products, 'categories'=>$categories,
-        'total'=>$total, 'customer_id'=>$customer_id, 'upload_name'=>$upload_name, 'upload_image'=>$upload_image,
-        'upload_price'=>$upload_price, 'upload_description'=>$upload_description, 'time'=>$time);
+$database = new Database();
+try {
+    $database->connect();
+} catch (Exception $e) {
+    //Log failure to connect
 }
 
-function process($data) {
-    switch ($data['page']) {
-        case 'contact':
-            $data = validateContact($data);
-            if ($data['valid']) {
-                $data['page'] = 'contact_received';
-            }
-            return $data;
-            break;
-        case 'login': 
-            $data = validateLogin($data);
-            if ($data['valid']) {
-                $admin = isAdmin($data['email']);
-                loginUser($data['email'], $admin);
-                $data['page'] = 'home';
-            }
-            return $data;
-            break;
-        case 'register':
-            $data = validateRegistration($data);
-            if ($data['valid']) {
-                $data['page'] = 'login';
-            }
-            return $data;
-            break;
-        case 'upload':
-            if (isUserAdmin()) {
-                if ($data['product_id'] == -1) {
-                    //upload
-                    $data = validateUpload($data);
-                    if ($data['valid']) {
-                        if (uploadProduct($data)) {
-                            $data['page'] = 'upload succeeded';
-                        } else {
-                            $data['upload_name_error'] = 'Something went wrong please try again.';
-                        }
-                    }
-                } else {
-                    //edit
-                    $data = validateUpload($data);
-                    if ($data['valid']) {
-                        if (editProduct($data)) {
-                            $data['page'] = 'upload succeeded';
-                        } else {
-                            $data['upload_name_error'] = 'Something went wrong please try again.';
-                        }
-                    }
-                }
-            } else {
-                $data['page'] = 'nice try';
-            }
-            return $data;
-            break;
-        case 'edit':
-            if (isUserAdmin()) {
-                $product = getProductByID($data['product_id']);
-                $data['upload_name'] = $product['name'];
-                $data['upload_image'] = $product['image'];
-                $data['upload_price'] = $product['price'];
-                $data['upload_description'] = $product['description'];
-                $data['categories'] = explode(',', $product['tags']);
-                $data['upload_name_error'] = '';
-                $data['upload_image_error'] = '';
-                $data['upload_price_error'] = '';
-                $data['upload_description_error'] = '';
-                $data['page'] = 'upload';
-            } else {
-                $data['page'] = 'nice try';
-            }
-            return $data;
-            break;
-        case 'logout':
-            logoutUser();
-            $data['page'] = 'home';
-            return $data;
-            break;
-        case 'order':
-            if (!cartExists()) {
-                createCart();
-            }
-            addToCart($data['product_id'], $data['amount']);
-            $data['page'] = 'details';
-            return $data;
-            break;
-        case 'cart':
-            if (!empty($data['amounts'])) {
-                foreach ($data['amounts'] as $id => $amount) {
-                    if ($amount == 0) {
-                        removeFromCart($id);
-                    }
-                }
-            }
-            return $data;
-            break;
-        case 'order received':
-            if ($data['total'] != 0) {
-                $data['order_id'] = saveOrder($data['total'], $data['products'], $data['customer_id']);
-                removeFromSession('cart');
-            } else {
-                $data['page'] = 'cart';
-                $data['cart_empty'] = true;
-            }
-            return $data;
-            break;
-        case 'home':
-        case 'top':
-        case 'dinostaur':
-        case 'details':
-        case 'about':
-        default:
-            return $data;
-            break;
-    }
+$model = new Model($database);
+$model->setModel();
+switch ($model->getPage()) {
+    case 'home':
+    case 'about':
+    default:
+        $controller = new Controller($model);
+        break;
+    case 'contact':
+    case 'login':
+    case 'register':
+    case 'logout':
+        $model = new User_Model($database);
+        $model->setModel();
+        $controller = new User_Controller($model);
+        $controller->process();
+        break;
+    case 'cart':
+    case 'order':
+    case 'order received':
+    case 'upload':
+    case 'edit':
+        $model = new Store_Model($database);
+        $model->setModel();
+        $controller = new Store_Controller($model);
+        $controller->process();
+        break;
 }
-
-function showRequestedPage($data) {
-    switch ($data['page']) {
-        case 'home':
-            include_once "home_doc.php";
-            $doc = new Home_Doc($data);
-            $doc->show();
-            break;
-        case 'top':
-            include 'top_doc.php';
-            $doc = new Top_Doc($data);
-            $doc->show();
-            break;
-        case 'dinostaur':
-            include 'dinostaur_doc.php';
-            $doc = new Dinostaur_Doc($data);
-            $doc->show();
-            break;
-        case 'details':
-            include 'details_doc.php';
-            $doc = new Details_Doc($data);
-            $doc->show();
-            break;
-        case 'about':
-            include 'about_doc.php';
-            $doc = new About_Doc($data);
-            $doc->show();
-            break;
-        case 'contact':
-            include 'contact_doc.php';
-            $doc = new Contact_Doc($data);
-            $doc->show();
-            break;
-        case 'contact_received':
-            include 'contact_received_doc.php';
-            $doc = new Contact_Received_Doc($data);
-            $doc->show();
-            break;
-        case 'login':
-            include 'login_doc.php';
-            $doc = new Login_Doc($data);
-            $doc->show();
-            break;
-        case 'register':
-            include 'register_doc.php';
-            $doc = new Register_Doc($data);
-            $doc->show();
-            break;
-        case 'upload':
-            include 'upload_doc.php';
-            $doc = new Upload_Doc($data);
-            $doc->show();
-            break;
-        case 'upload succeeded':
-            include 'upload_succeeded_doc.php';
-            $doc = new Upload_Succeeded_Doc($data);
-            $doc->show();
-            break;
-        case 'cart':
-            include 'cart_doc.php';
-            $doc = new Cart_Doc($data);
-            $doc->show();
-            break;
-        case 'order received':
-            include 'cart_received_doc.php';
-            $doc = new Cart_Received_Doc($data);
-            $doc->show();
-            break;
-        default:
-            include 'error_doc.php';
-            $doc = new Error_Doc($data);
-            $doc->show();
-            break;
-    }
-//    beginDocument();
-//    showHeadSection();
-//    showBodySection($data);
-//    endDocument();
-}
-
-function getPostVar($key, $default='') {
-    $value = filter_input(INPUT_POST, $key);
-    return isset($value) ? $value : $default;
-}
-
-function getUrlVar($key, $default='') {
-    $value = filter_input(INPUT_GET, $key);
-    return isset($value) ? $value : $default;
-}
-
-function testInput($data) {
-  $data = trim($data);
-  $data = addslashes($data);
-  $data = htmlentities($data);
-  return $data;
-}
+$view = new View($model, $database);
+$view->showPage();

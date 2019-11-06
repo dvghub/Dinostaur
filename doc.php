@@ -1,10 +1,12 @@
 <?php
 
 class Doc {
-    protected $_data;
+    protected $_model;
+    protected $_database;
 
-    public function __construct($data) {
-        $this->_data = $data;
+    public function __construct($model, $database) {
+        $this->_model = $model;
+        $this->_database = $database;
     }
 
     private function beginDoc() {

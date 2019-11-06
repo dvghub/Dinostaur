@@ -2,12 +2,12 @@
 require_once 'Form_Doc.php';
 
 class Details_Doc extends Form_Doc {
-    public function __construct($data) {
-        parent::__construct($data);
+    public function __construct($model, $database) {
+        parent::__construct($model, $database);
     }
 
     protected function content() {
-        $product = getProduct($this->_data['product_id']);
+        $product = getProduct($this->_database, $this->_model->getProductId());
         $tags = '';
 
         echo "<img class='float-left float-md-right col-12 col-md-6' src='".$product['image']."'>

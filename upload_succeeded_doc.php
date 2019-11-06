@@ -2,8 +2,8 @@
 require_once 'Basic_Doc.php';
 
 class Upload_Succeeded_Doc extends Basic_Doc {
-    public function __construct($data) {
-        parent::__construct($data);
+    public function __construct($model, $database) {
+        parent::__construct($model, $database);
     }
 
     protected function content() {

@@ -1,32 +1,24 @@
 <?php
-include 'sql_manager.php';
+include 'database.php';
 
-function save($email, $name, $password) {
-    try {
-        return saveUser($email, $name, $password);
-    } catch (Exception $e) {
-        showMessage("Couldn't connect to database. Please check your network connection.");
-        //Pseudo log($e->getMessage())
-        return false;
-    }
+function connectToDb($database) {
+    return $database->connect();
 }
 
-function userByEmail($email) {
-    try {
-        return getUserByEmail($email);
-    } catch (Exception $e) {
-        showMessage("Couldn't connect to database. Please check your network connection.");
-        //Pseudo log($e->getMessage())
-        return false;
-    }
+function save($db, $email, $name, $password) {
+    return $db->saveUser($email, $name, $password);
 }
 
-function isAdmin($email) {
-    return userByEmail($email)['admin'];
+function userByEmail($db, $email) {
+    return $db->getUserByEmail($email);
 }
 
-function authUser($email, $password) {
-    $info = userByEmail($email);
+function isAdmin($db, $email) {
+    return $db->userByEmail($email)['admin'];
+}
+
+function authUser($db, $email, $password) {
+    $info = $db->userByEmail($email);
     if (!$info) {
         return array('status' => 'user_unknown');
     } else {
@@ -38,72 +30,42 @@ function authUser($email, $password) {
     }
 }
 
-function uploadProduct($data) {
-    try {
-        $tags = '';
-        foreach ($data['categories'] as $category) {
-            $tags .= ",".$category;
-        }
-        return upload($data['upload_name'], $data['upload_image'], $data['upload_price'], $data['upload_description'], $tags);
-    } catch (Exception $e) {
-        showMessage("Couldn't connect to database. Please check your network connection.");
-        //Pseudo log($e->getMessage())
-        return false;
+function uploadProduct($db, $model) {
+    $tags = '';
+    foreach ($model->categories as $category) {
+        $tags .= ",".$category;
     }
+    return $db->upload($model->upload_name, $model->upload_image, $model->upload_price, $model->upload_description, $tags);
 }
 
-function editProduct($data) {
-    try {
-        $tags = '';
-        foreach ($data['categories'] as $category) {
-            $tags .= ",".$category;
-        }
-        return edit($data['product_id'], $data['upload_name'], $data['upload_image'], $data['upload_price'], $data['upload_description'], $tags, date('Y-m-d H:i:s'));
-    } catch (Exception $e) {
-        showMessage("Couldn't connect to database. Please check your network connection.");
-        //Pseudo log($e->getMessage())
-        return false;
+function editProduct($db, $model) {
+    $tags = '';
+    foreach ($model->categories as $category) {
+        $tags .= ",".$category;
     }
+    return $db->edit($model->product_id, $model->upload_name, $model->upload_image, $model->upload_price, $model->upload_description, $tags, date('Y-m-d H:i:s'));
 }
 
-function getProducts($category) {
-    try {
-        return getProductByCat($category);
-    } catch (Exception $e) {
-        showMessage("Couldn't connect to database. Please check your network connection.");
-        //Pseudo log($e->getMessage())
-        return false;
-    }
+function getProducts($db, $category) {
+    return $db->getProductByCat($category);
 }
 
-function getProduct($id) {
-    try {
-        return getProductByID($id);
-    } catch (Exception $e) {
-        showMessage("Couldn't connect to database. Please check your network connection.");
-        //Pseudo log($e->getMessage())
-        return false;
-    }
+function getProduct($db, $id) {
+    return $db->getProductByID($id);
 }
 
-function getInfo($name) {
-    return getInfoByName($name);
+function getInfo($db, $name) {
+    return $db->getInfoByName($name);
 }
 
-function getCategories() {
-    try {
-        return categories();
-    } catch (Exception $e) {
-        showMessage("Couldn't connect to database. Please check your network connection.");
-        //Pseudo log($e->getMessage())
-        return false;
-    }
+function getCategories($db) {
+    return $db->categories();
 }
 
-function getTop($howmany) {
-    return getMostSold($howmany);
+function getTop($db, $howmany) {
+    return $db->getMostSold($howmany);
 }
 
-function saveOrder($total, $products, $customer_id) {
-    return saveOrdered($total, $products, $customer_id);
+function saveOrder($db, $total, $products, $customer_id) {
+    return $db->saveOrdered($total, $products, $customer_id);
 }

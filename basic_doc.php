@@ -2,12 +2,12 @@
 require_once 'Doc.php';
 
 class Basic_Doc extends Doc {
-    public function __construct($data) {
-        parent::__construct($data);
+    public function __construct($model, $database) {
+        parent::__construct($model, $database);
     }
 
     private function title() {
-        echo "<title>Dinostaur -- ".$this->_data['page']."</title>";
+        echo "<title>Dinostaur -- ".$this->_model->getPage()."</title>";
     }
 
     private function meta() {
@@ -23,26 +23,26 @@ class Basic_Doc extends Doc {
 
     private function header() {
         echo '<header class="d-none d-md-block text-center">';
-        echo $this->_data['page'] != 'details' ? '<h1 class="text-uppercase">'.$this->_data['page'].'</h1>' : '<h1 class="text-uppercase">'.$this->_data['product_name'].'</h1>';
+        echo $this->_model->getPage() != 'details' ? '<h1 class="text-uppercase">'.$this->_model->getPage().'</h1>' : '<h1 class="text-uppercase">'.$this->_model->getProductName().'</h1>';
         echo '</header>';
     }
 
     private function menu() {
         $this->showMenuStart();
-        $this->showMenuItem('home', 'HOME', $this->_data['page']);
-        $this->showMenuItem('top', 'TOP 5', $this->_data['page']);
-        $this->showMenuItem('dinostaur', 'DINOSTAUR', $this->_data['page']);
-        $this->showMenuItem('about', 'ABOUT', $this->_data['page']);
-        $this->showMenuItem('contact', 'CONTACT', $this->_data['page']);
+        $this->showMenuItem('home', 'HOME', $this->_model->getPage());
+        $this->showMenuItem('top', 'TOP 5', $this->_model->getPage());
+        $this->showMenuItem('dinostaur', 'DINOSTAUR', $this->_model->getPage());
+        $this->showMenuItem('about', 'ABOUT', $this->_model->getPage());
+        $this->showMenuItem('contact', 'CONTACT', $this->_model->getPage());
         if (isUserLogged()) {
             if (isUserAdmin()) {
-                $this->showMenuItem('upload', 'UPLOAD', $this->_data['page']);
+                $this->showMenuItem('upload', 'UPLOAD', $this->_model->getPage());
             }
-            $this->showMenuItem('logout', 'LOG OUT ', $this->_data['page'], strtoupper(getUserByEmail(getLoggedEmail())['name']));
-            $this->showMenuItem('cart', 'CART (' . (cartExists() ? getAmountInCart() : 0) . ' ITEMS)', $this->_data['page'], '', true);
+            $this->showMenuItem('logout', 'LOG OUT ', $this->_model->getPage(), strtoupper(userByEmail($this->_database, getLoggedEmail())['name']));
+            $this->showMenuItem('cart', 'CART (' . (cartExists() ? getAmountInCart() : 0) . ' ITEMS)', $this->_model->getPage(), '', true);
         } else {
-            $this->showMenuItem('login', 'LOG IN', $this->_data['page']);
-            $this->showMenuItem('register', 'REGISTER', $this->_data['page']);
+            $this->showMenuItem('login', 'LOG IN', $this->_model->getPage());
+            $this->showMenuItem('register', 'REGISTER', $this->_model->getPage());
         }
         $this->showMenuEnd();
     }
@@ -63,6 +63,9 @@ class Basic_Doc extends Doc {
     protected function bodyContent() {
         $this->header();
         $this->menu();
+        if (!empty($alert = $this->_model->getAlert())) {
+            $this->showMessage($alert);
+        }
         $this->content();
         $this->footer();
     }
@@ -82,5 +85,9 @@ class Basic_Doc extends Doc {
 
     private function showMenuEnd() {
         echo "</div></div></nav><div class='col-12 bg-cornflower px-0 height-5 mb-3'></div>";
+    }
+
+    protected function showMessage($message) {
+        echo "<span class='col-12 text-center d-block border border-danger text-danger'>".$message.'</span>';
     }
 }

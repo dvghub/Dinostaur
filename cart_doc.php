@@ -2,8 +2,8 @@
 require_once 'Form_Doc.php';
 
 class Cart_Doc extends Form_Doc {
-    public function __construct($data) {
-        parent::__construct($data);
+    public function __construct($model, $database) {
+        parent::__construct($model, $database);
     }
 
     protected function content() {
@@ -12,22 +12,22 @@ class Cart_Doc extends Form_Doc {
         if (cartExists()) {
             $items = getCart();
 
-            showFormStart($this->_data['page'], '', 8);
+            $this->showFormStart($this->_model->getPage(), '', 8);
             foreach ($items as $id=>$amount) {
-                if (!empty($data['amounts'])) {
-                    $quantity = $data['amounts'][$id];
+                if (!empty($this->_model->getAmounts())) {
+                    $quantity = $this->_model->getAmounts()[$id];
                 } else {
                     $quantity = $amount;
                 }
-                $product = getProduct($id);
+                $product = getProduct($this->_database, $id);
                 $total += $quantity * $product['price'];
                 $this->showProduct($product, $quantity, $id);
             }
             echo "<span class='float-right clear-right d-block font-larger font-weight-bolder mt-3'>Your total: &euro;".$total."</span>";
-            showFormEnd('float-left clear-left d-block col-6 col-md-5 col-xl-3 bg-dark text-white border-0 mt-3 mx-auto', 'UPDATE PRICES');
-            $this->showOrder('order received', $items, $total, getUserByEmail(getLoggedEmail())['id']);
+            $this->showFormEnd('float-left clear-left d-block col-6 col-md-5 col-xl-3 bg-dark text-white border-0 mt-3 mx-auto', 'UPDATE PRICES');
+            $this->showOrder('order received', $items, $total, userByEmail($this->_database, getLoggedEmail())['id']);
         } else {
-            showMessage('Please add items to your cart.');
+            $this->showMessage('Please add items to your cart.');
         }
     }
 
@@ -40,12 +40,12 @@ class Cart_Doc extends Form_Doc {
     }
 
     private function showOrder($page, $items, $total, $customer_id) {
-        showFormStart($page);
+        $this->showFormStart($page);
         foreach ($items as $id=>$amount) {
             echo "<input type='hidden' name='products[".$id."]' value='".$amount."'>";
         }
         echo "    <input type='hidden' name='total' value='".$total."'>
               <input type='hidden' name='customer_id' value='".$customer_id."'>";
-        showFormEnd('height-50 float-right clear-right col-3 bg-cornflower text-white border-0', 'ORDER');
+        $this->showFormEnd('height-50 float-right clear-right col-3 bg-cornflower text-white border-0', 'ORDER');
     }
 }

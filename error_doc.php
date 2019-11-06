@@ -2,11 +2,11 @@
 require_once 'Basic_Doc.php';
 
 class Error_Doc extends Basic_Doc {
-    public function __construct($data) {
-        parent::__construct($data);
+    public function __construct($model, $database) {
+        parent::__construct($model, $database);
     }
 
     protected function content() {
-        showError('Page ['.$this->_data['page'].'] not found.');
+        echo '<p>Page ['.$this->_model->getPage().'] not found.</p>';
     }
 }
