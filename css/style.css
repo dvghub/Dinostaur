@@ -4,9 +4,6 @@ html {
     margin-right: auto;
     text-align: left;
 }
-body {
-    margin:0;
-}
 header {
     text-align: center;
     font-size: 48px;
@@ -14,6 +11,7 @@ header {
 body {
     font-size: 12px;
     color: darkgrey;
+    margin: 0;
 }
 h1 {
     text-transform: uppercase;
@@ -44,10 +42,12 @@ label {
     float: left;
     width: 15%;
     clear: left;
+    margin: 5px 0px;
 }
 input {
     width: 45%;
     float: left;
+    margin: 5px 0px;
 }
 textarea {
     width: 45%;
@@ -89,12 +89,24 @@ footer {
 #warning {
     color: red;
     float: left;
+    margin: 5px 0px 5px 10px;
+}
+#alert {
+    display: block;
+    width: 100%;
+    border-color: #800000;
+    border-width: medium;
+    border-style: solid;
+    color: #800000;
+    text-align: center;
+    font-size: 15px;
+    margin: 10px 0px 10px 0px;
 }
 #form {
     width: 100%
 }
 #footer-line {
-    position: absolute;
+    position: fixed;
     bottom: 22px;
     width: 800px;
     height: 5px;

@@ -5,7 +5,7 @@ function beginDocument() {
 }
 function showHeadSection() {
     echo "    <head>
-        <title>Opdracht_2.2</title>
+        <title>Opdracht_2.3</title>
         <link rel='stylesheet' href='css/style.css'>
     </head>";
 }

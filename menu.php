@@ -7,7 +7,7 @@ function showMenu($data) {
     showMenuItem('about', 'ABOUT', $page);
     showMenuItem('contact', 'CONTACT', $page);
     if (isUserLogged()) {
-        showMenuItem('logout', 'LOG OUT '.strtoupper(getLoggedUsername()), $page);
+        showMenuItem('logout', 'LOG OUT '.strtoupper(getLoggerUsername()), $page);
     } else {
         showMenuItem('login', 'LOG IN', $page);
         showMenuItem('register', 'REGISTER', $page);
@@ -19,9 +19,9 @@ function showMenuStart() {
     echo '    <nav>';
 }
 function showMenuItem($id, $title, $page) {
-    echo '<a href=\'index.php?page='.$id.($page == $id ? '\' class=\'active\'' : '').'\'>'.$title.'</a>';
+    echo "<a href='index.php?page=".$id.($page == $id ? "' class='active" : '')."'>".$title."</a>";
 }
 function showMenuEnd() {
-    echo '    </nav>
-    <div id=\'nav-line\'></div>';
+    echo "    </nav>
+    <div id='nav-line'></div>";
 }

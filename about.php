@@ -1,5 +1,6 @@
 <?php 
 function showAboutContent() {
+    //TOMDO get a personality
     echo '
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eu neque consequat elit consectetur ultrices non tincidunt dui. Duis lobortis massa eu odio fermentum maximus. Cras nec congue massa. Quisque feugiat maximus justo eu scelerisque. Phasellus pellentesque cursus velit quis tempus. Proin nec neque non turpis gravida blandit in non leo. Ut pulvinar pellentesque orci eu tempus. Quisque consequat facilisis felis id vulputate. Aliquam lobortis non enim sed mattis. Sed fermentum odio eget finibus sodales. </p.
     <p>Nunc ultrices orci facilisis libero luctus, eu molestie urna vulputate. Quisque commodo sapien sem, sit amet varius ipsum maximus a. Praesent ac sem vitae quam tincidunt molestie sed in lectus. Mauris nec scelerisque nunc. Cras et odio condimentum, consectetur velit vel, scelerisque metus. Phasellus consequat aliquam nunc. Duis sit amet nibh elit. Duis accumsan nunc eu sem tincidunt sollicitudin. Sed dapibus orci sed urna laoreet, vel egestas orci sodales. </p>

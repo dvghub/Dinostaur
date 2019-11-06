@@ -1,16 +1,26 @@
 <?php 
-function loginSessionUser($username) {
-    $_SESSION['username'] = $username;
+function login($name) {
+    $_SESSION['name'] = $name;
 }
 
-function isSessionUserLogged() {
-    return array_key_exists('username', $_SESSION);
+function isUserLogged() {
+    return array_key_exists('name', $_SESSION);
 }
 
-function getLoggedSessionUsername() {
-    return $_SESSION['username'];
+function getLoggerUsername() {
+    return $_SESSION['name'];
 }
 
-function logoutSessionUser() {
+function logoutUser() {
+    session_unset();
     session_destroy();
+}
+
+function setSessionVar($id, $value) {
+    $_SESSION[$id] = $value;
+}
+
+function getSessionVar($id) {
+    return array_key_exists($id, $_SESSION) ? $_SESSION[$id] : null;
+    
 }

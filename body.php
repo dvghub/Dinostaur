@@ -1,13 +1,7 @@
 <?php 
-require 'menu.php';
-require 'home.php';
-require 'about.php';
-require 'contact.php';
-require 'login.php';
-require 'register.php';
-require 'form.php';
 
 function showBodySection($data) {
+    include 'menu.php';
     echo '    <body>';
     showHeader($data['page']);
     showMenu($data);
@@ -26,23 +20,29 @@ function showHeader($page){
 function showContent($data) {
     switch ($data['page']) {
         case 'home':
+            include 'home.php';
             showHomeContent();
             break;
         case 'about':
+            include 'about.php';
             showAboutContent();
             break;
         case 'contact':
-            showContactContent($data);
+            include 'contact.php';
+            showContactForm($data);
+            break;
+        case 'received':
+            include 'contact.php';
+            showReceived($data);
             break;
         case 'login':
-            showLoginContent($data);
+            include 'login.php';
+            showLoginForm($data);
             break;
         case 'register':
-            showRegisterContent($data);
+            include 'register.php';
+            showRegistrationForm($data);
             break;
-        case 'logout':
-            logoutUser();
-            echo "<script language='javascript'>window.location.href ='index.php?page=home'</script>";
         default:
             showError('Page ['.$data['page'].'] not found.');
             break;
@@ -56,4 +56,10 @@ function showFooter() {
 
 function showError($error) {
     echo $error;
+}
+
+function showMessage($message) {
+    echo "
+        <span id='alert'>".$message."</span>
+    ";
 }
