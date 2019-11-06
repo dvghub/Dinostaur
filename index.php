@@ -27,8 +27,14 @@ function getRequestData() {
         $amount = testInput(getPostVar('amount', 0));
         $amounts = array_key_exists('amounts', $_POST) ? $_POST['amounts'] : array();
         $products = array_key_exists('products', $_POST) ? $_POST['products'] : array();
+        $categories = array_key_exists('categories', $_POST) ? $_POST['categories'] : array();
         $total = testInput(getPostVar('total', 0));
-        $customer_id = testInput(getPostVar('customer_id', 0));
+        $customer_id = testInput(getPostVar('customer_id', -1));
+        $upload_name = testInput(getPostVar('upload_name', ''));
+        $upload_image = testInput(getPostVar('upload_image', ''));
+        $upload_price = testInput(getPostVar('upload_price', 0));
+        $upload_description = testInput(getPostVar('upload_description', ''));
+        $time = testInput(getPostVar('time', 0));
     } else {
         $requested_page = testInput(getUrlVar('page', 'home'));
         $name = '';
@@ -42,13 +48,20 @@ function getRequestData() {
         $amount = 0;
         $amounts = array();
         $products = array();
+        $categories = array();
         $total = 0;
-        $customer_id = 0;
+        $customer_id = -1;
+        $upload_name = '';
+        $upload_image = '';
+        $upload_price = 0;
+        $upload_description = '';
+        $time = 0;
     }
     return array('page'=>$requested_page, 'type'=>$request_type, 'name'=>$name, 'email'=>$email, 'message'=>$message,
         'password'=>$password, 'password2'=>$password2, 'category'=>$category, 'product_id'=>$product_id,
-        'product_name'=>$product_name, 'amount'=>$amount, 'amounts'=>$amounts, 'products'=>$products, 'total'=>$total,
-        'customer_id'=>$customer_id);
+        'product_name'=>$product_name, 'amount'=>$amount, 'amounts'=>$amounts, 'products'=>$products, 'categories'=>$categories,
+        'total'=>$total, 'customer_id'=>$customer_id, 'upload_name'=>$upload_name, 'upload_image'=>$upload_image,
+        'upload_price'=>$upload_price, 'upload_description'=>$upload_description, 'time'=>$time);
 }
 
 function process($data) {
@@ -63,7 +76,8 @@ function process($data) {
         case 'login': 
             $data = validateLogin($data);
             if ($data['valid']) {
-                loginUser($data['email']);
+                $admin = isAdmin($data['email']);
+                loginUser($data['email'], $admin);
                 $data['page'] = 'home';
             }
             return $data;
@@ -71,9 +85,53 @@ function process($data) {
         case 'register':
             $data = validateRegistration($data);
             if ($data['valid']) {
-                $data['error_email'] = '';
-                $data['error_password'] = '';
                 $data['page'] = 'login';
+            }
+            return $data;
+            break;
+        case 'upload':
+            if (isUserAdmin()) {
+                if ($data['product_id'] == -1) {
+                    //upload
+                    $data = validateUpload($data);
+                    if ($data['valid']) {
+                        if (uploadProduct($data)) {
+                            $data['page'] = 'upload succeeded';
+                        } else {
+                            $data['upload_name_error'] = 'Something went wrong please try again.';
+                        }
+                    }
+                } else {
+                    //edit
+                    $data = validateUpload($data);
+                    if ($data['valid']) {
+                        if (editProduct($data)) {
+                            $data['page'] = 'upload succeeded';
+                        } else {
+                            $data['upload_name_error'] = 'Something went wrong please try again.';
+                        }
+                    }
+                }
+            } else {
+                $data['page'] = 'nice try';
+            }
+            return $data;
+            break;
+        case 'edit':
+            if (isUserAdmin()) {
+                $product = getProductByID($data['product_id']);
+                $data['upload_name'] = $product['name'];
+                $data['upload_image'] = $product['image'];
+                $data['upload_price'] = $product['price'];
+                $data['upload_description'] = $product['description'];
+                $data['categories'] = explode(',', $product['tags']);
+                $data['upload_name_error'] = '';
+                $data['upload_image_error'] = '';
+                $data['upload_price_error'] = '';
+                $data['upload_description_error'] = '';
+                $data['page'] = 'upload';
+            } else {
+                $data['page'] = 'nice try';
             }
             return $data;
             break;

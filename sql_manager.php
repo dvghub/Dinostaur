@@ -1,6 +1,6 @@
 <?php 
 function connect() {
-    $db_host = 'localhost';
+    $db_host = '127.0.0.1';
     $db_username = 'sql_manager';
     $db_password = 'lookatmeimastrongpassword';
     $db_name = 'dinostaur';
@@ -16,7 +16,7 @@ function connect() {
 function getUserByEmail($email) {
     $db = connect();
     $email = mysqli_real_escape_string($db, $email);
-    $sql = 'SELECT id, name, password FROM users WHERE email= "'.$email.'"';
+    $sql = "SELECT * FROM users WHERE email= '".$email."'";
     $result = mysqli_query($db, $sql);
     $result = mysqli_fetch_assoc($result);
     mysqli_close($db);
@@ -28,8 +28,8 @@ function saveUser($email, $name, $password) {
     $email = mysqli_real_escape_string($db, $email);
     $name = mysqli_real_escape_string($db, $name);
     $password = mysqli_real_escape_string($db, $password);
-    $sql = 'INSERT INTO users (email, name, password) 
-    VALUES ("'.$email.'", "'.$name.'", "'.$password.'")';
+    $sql = "INSERT INTO users (email, name, password) 
+    VALUES ('".$email."', '".$name."', '".$password."')";
     $result = mysqli_query($db, $sql);
     mysqli_close($db);
     return $result;
@@ -47,6 +47,38 @@ function categories() {
     return $result;
 }
 
+function upload($name, $img, $price, $description, $tags) {
+    $db = connect();
+    $name = mysqli_real_escape_string($db, $name);
+    $img = mysqli_real_escape_string($db, $img);
+    $price = mysqli_real_escape_string($db, $price);
+    $description = mysqli_real_escape_string($db, $description);
+    $tags = mysqli_real_escape_string($db, $tags);
+    $sql = "INSERT INTO products (name, image, price, description, tags)
+    VALUES ('".$name."', 'img/".$img."', '".$price."', '".$description."', 'all".$tags."')";
+    $result = mysqli_query($db, $sql);
+    mysqli_close($db);
+    return $result;
+}
+
+function edit($id, $name, $img, $price, $description, $tags, $time) {
+    $db = connect();
+    $id = mysqli_real_escape_string($db, $id);
+    $name = mysqli_real_escape_string($db, $name);
+    $img = mysqli_real_escape_string($db, $img);
+    $price = mysqli_real_escape_string($db, $price);
+    $description = mysqli_real_escape_string($db, $description);
+    $tags = mysqli_real_escape_string($db, $tags);
+    $time = mysqli_real_escape_string($db, $time);
+    $sql = "UPDATE products 
+            SET name = '".$name."', image = '".$img."', price = '".$price."', description = '".$description."', 
+                 tags = 'all".$tags."', last_edited = '".$time."' 
+            WHERE id = '".$id."'";
+    $result = mysqli_query($db, $sql);
+    mysqli_close($db);
+    return $result;
+}
+
 function getProductByCat($category) {
     $db = connect();
     $category = mysqli_real_escape_string($db, $category);
@@ -59,7 +91,16 @@ function getProductByCat($category) {
 function getProductByID($id) {
     $db = connect();
     $id = mysqli_real_escape_string($db, $id);
-    $sql = 'SELECT * FROM products WHERE id="'.$id.'"';
+    $sql = "SELECT * FROM products WHERE id='".$id."'";
+    $result = mysqli_fetch_assoc(mysqli_query($db, $sql));
+    mysqli_close($db);
+    return $result;
+}
+
+function getInfoByName($name) {
+    $db = connect();
+    $name = mysqli_real_escape_string($db, $name);
+    $sql = "SELECT id, image, last_edited FROM products WHERE name = '".$name."'";
     $result = mysqli_fetch_assoc(mysqli_query($db, $sql));
     mysqli_close($db);
     return $result;

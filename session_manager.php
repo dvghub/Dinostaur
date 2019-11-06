@@ -1,6 +1,7 @@
 <?php 
-function loginUser($email) {
+function loginUser($email, $isAdmin) {
     $_SESSION['email'] = $email;
+    $_SESSION['admin'] = $isAdmin;
 }
 
 function isUserLogged() {
@@ -9,6 +10,10 @@ function isUserLogged() {
 
 function getLoggedEmail() {
     return $_SESSION['email'];
+}
+
+function isUserAdmin() {
+    return (array_key_exists('admin', $_SESSION) && $_SESSION['admin']);
 }
 
 function logoutUser() {

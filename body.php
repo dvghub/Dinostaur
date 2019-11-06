@@ -30,7 +30,7 @@ function showContent($data) {
             break;
         case 'dinostaur':
             include 'dinostaur.php';
-            showWsHomeContent($data);
+            showDinostaurContent($data);
             break;
         case 'details':
             include 'dinostaur.php';
@@ -55,6 +55,14 @@ function showContent($data) {
         case 'register':
             include 'register.php';
             showRegistrationForm($data);
+            break;
+        case 'upload':
+            include 'upload.php';
+            showUpload($data);
+            break;
+        case 'upload succeeded':
+            include 'upload.php';
+            showUploadSucceeded();
             break;
         case 'cart':
             include 'cart.php';
