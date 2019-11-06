@@ -2,11 +2,11 @@
 function showFormStart($page) {
     echo "
     <form method='post'>
-        <input type='hidden' name='page' value='".$page."'>
-        <div id='form'>";
+        <input type='hidden' name='page' value='".$page."'>";
 }
 
 function showFormInput($id, $label, $element, $type, $value, $pattern, $autofocus, $error) {
+    if ($type == 'password') $value = '';
     if ($element == 'textarea') {
         echo "<label for='".$id."'>".$label."</label><textarea id='".$id."' name='".$id."' type='".$type."' pattern='".$pattern."' autofocus=".$autofocus.">".$value."</textarea>";
     } else {
@@ -15,9 +15,8 @@ function showFormInput($id, $label, $element, $type, $value, $pattern, $autofocu
     if (!empty($error)) echo "<span id='warning'>".$error."</span>";
 }
 
-function showFormEnd() {
+function showFormEnd($class, $value) {
     echo "
-              <input type='submit' id='submit' value='SEND'>
-        </div>
-    </from>";
+              <input type='submit' class='".$class."' value='".$value."'>
+    </form>";
 }

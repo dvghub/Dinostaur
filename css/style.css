@@ -6,7 +6,7 @@ html {
 }
 header {
     text-align: center;
-    font-size: 48px;
+    font-size: 40px;
 }
 body {
     font-size: 12px;
@@ -27,27 +27,26 @@ nav a {
     padding: 14px 16px;
     text-decoration: none;
     display: block;
-    border-style: solid;
-    border-width: 5px 5px 0px 5px;
-    border-color: black;
+    border: 5px solid black;
+    border-bottom-width: 0;
 }
 nav a:hover, nav a.active {
     background-color: cornflowerblue;
 }
-form {
-    clear: left;
+nav a#cart {
+    float: right;
 }
 label {
     display: block;
     float: left;
     width: 15%;
     clear: left;
-    margin: 5px 0px;
+    margin: 5px 0;
 }
 input {
     width: 45%;
     float: left;
-    margin: 5px 0px;
+    margin: 5px 0;
 }
 textarea {
     width: 45%;
@@ -63,47 +62,190 @@ footer {
     width: 780px;
     padding: 5px 10px;
 }
-#nav-line {
-    width: 100%;
-    height: 5px;
-    background-color: cornflowerblue;
-    margin-bottom: 10px;
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
 }
-#submit {
+.col {
+    flex: 25%;
+    padding: 0 4px;
+    box-sizing: border-box;
+}
+.tile {
+    width: 100%;
+    float: left;
+    box-sizing: border-box;
+    padding: 5px;
+}
+.tile:hover {
+    border: 1px solid lightgrey;
+}
+.tile-thumbnail {
+    width: 100%;
+}
+.tile-name {
+    clear: left;
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+}
+.tile-price {
+    clear: left;
+    float: left;
+    font-weight: bold;
+}
+.tile-order {
+    padding: 5px;
+    clear: left;
+    float: left;
+    width: 100%;
+    background-color: cornflowerblue;
+    text-decoration: none;
+    color: white;
+    display: none;
+    border: none;
+}
+.tile:hover .tile-order {
+    display: block;
+}
+.page-img {
+    float: right;
+    clear: right;
+    width: 50%;
+}
+.page-price {
+    float: left;
+    clear: left;
+    font-weight: bold;
+}
+.page-description {
+    text-align: justify;
+    clear: left;
+    display: block;
+    width: 48%;
+    margin: 0 0 5px;
+}
+.page-amount {
+    clear: left;
+    float: left;
+    width: 40px;
+    height: 20px;
+    border: cornflowerblue solid 2px;
+}
+.page-order {
+    padding: 5px;
+    width: 25%;
+    background-color: cornflowerblue;
+    text-decoration: none;
+    color: white;
+    border: none;
+}
+.cart-item {
+    width: 100%;
+    height: 20px;
+    display: block;
+    clear: left;
+    float: left;
+    padding: 5px 0;
+    font-size: 14px;
+}
+.cart-name {
+    float: left;
+    display: block;
+    font-weight: bolder;
+    width: 75%;
+    height: 100%;
+}
+.cart-amount {
+    float: left;
+    display: block;
+    width: 40px;
+    height: 100%;
+    margin: -5px 5px 0 0;
+    border: none;
+}
+.cart-price {
+    float: right;
+    text-align: right;
+    display: block;
+    width: 10%;
+    height: 100%;
+}
+.cart-order {
+    float: right;
+    clear: right;
+    display: block;
+    font-size: 12px;
+    height: 40px;
+    width: 30%;
+    transition-duration: 0.3s;
+    background-color: cornflowerblue;
+    text-decoration: none;
+    color: white;
+    border: none;
+}
+.update-prices {
+    float: left;
+    display: block;
+    font-size: 12px;
+    height: 20px;
+    width: 15%;
+    transition-duration: 0.3s;
+    background-color: black;
+    text-decoration: none;
+    color: white;
+    border: none;
+}
+.submit {
     width: 100px;
     height: 50px;
-    border-radius: 10%;
     transition-duration: 0.3s;
     background-color: cornflowerblue;
     text-decoration: none;
     color: white;
     clear: left;
     margin-left: 15%;
+    border: none;
 }
-#submit:hover {
+.submit:hover {
     background-color: white;
     color: cornflowerblue;
-    border-color: cornflowerblue;
-    border-width: medium;
+    border: solid medium cornflowerblue;
+}
+#nav-line {
+    width: 100%;
+    height: 5px;
+    background-color: cornflowerblue;
+    margin-bottom: 10px;
+}
+#categories {
+    width: 100%;
+    margin: 0 0 5px 0;
+    display: block;
+}
+#cart-total {
+    float: right;
+    clear: right;
+    display: block;
+    font-size: 24px;
+}
+#form {
+    width: 100%;
 }
 #warning {
-    color: red;
+    color: #800000;
     float: left;
-    margin: 5px 0px 5px 10px;
+    margin: 5px 0 5px 10px;
 }
 #alert {
     display: block;
     width: 100%;
-    border-color: #800000;
-    border-width: medium;
-    border-style: solid;
+    border: medium solid #800000;
     color: #800000;
     text-align: center;
     font-size: 15px;
-    margin: 10px 0px 10px 0px;
-}
-#form {
-    width: 100%
+    margin: 10px 0 10px 0;
 }
 #footer-line {
     position: fixed;

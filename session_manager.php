@@ -1,14 +1,14 @@
 <?php 
-function login($name) {
-    $_SESSION['name'] = $name;
+function loginUser($email) {
+    $_SESSION['email'] = $email;
 }
 
 function isUserLogged() {
-    return array_key_exists('name', $_SESSION);
+    return array_key_exists('email', $_SESSION);
 }
 
-function getLoggerUsername() {
-    return $_SESSION['name'];
+function getLoggedEmail() {
+    return $_SESSION['email'];
 }
 
 function logoutUser() {
@@ -16,11 +16,38 @@ function logoutUser() {
     session_destroy();
 }
 
-function setSessionVar($id, $value) {
-    $_SESSION[$id] = $value;
+function cartExists() {
+    return array_key_exists('cart', $_SESSION);
 }
 
-function getSessionVar($id) {
-    return array_key_exists($id, $_SESSION) ? $_SESSION[$id] : null;
-    
+function createCart() {
+    $_SESSION['cart'] = array();
 }
+
+function addToCart($id, $amount) {
+    if (array_key_exists($id, $_SESSION['cart'])) {
+        $_SESSION['cart'][$id] += $amount;
+    } else {
+        $_SESSION['cart'][$id] = $amount;
+    }
+}
+
+function removeFromCart($id) {
+    unset($_SESSION['cart'][$id]);
+}
+
+function getCart() {
+    return $_SESSION['cart'];
+}
+
+function getAmountInCart() {
+    $total = 0;
+    foreach ($_SESSION['cart'] as $item) {
+        $total += $item;
+    }
+    return $total;
+}
+
+function removeFromSession($id) {
+    unset($_SESSION[$id]);
+};

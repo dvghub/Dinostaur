@@ -10,9 +10,9 @@ function getUserByEmail($email) {
     
     if (preg_match($pattern, $contents, $matches)) {
         $info = explode('|',$matches[0], 3);
-        return array ('found' => true, 'name' => $info[1], 'password' => $info[2]);
+        return array ('name' => $info[1], 'password' => $info[2]);
     } else {
-        return array ('found' => false, 'name', 'password');
+        return false;
     }
 }
 

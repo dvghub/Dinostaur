@@ -2,19 +2,18 @@
 
 function showBodySection($data) {
     include 'menu.php';
-    echo '    <body>';
-    showHeader($data['page']);
+    echo '<body>';
+    showHeader($data);
     showMenu($data);
     showContent($data);
     showFooter();
-    echo '    </body>';
+    echo '</body>';
 }
 
-function showHeader($page){
-    echo '
-    <header>
-        <h1>'.$page.'</h1>
-    </header>';
+function showHeader($data){
+    echo '<header>';
+    echo $data['page'] != 'details' ? '<h1>'.$data['page'].'</h1>' : '<h1>'.$data['product_name'].'</h1>';
+    echo '</header>';
 }
 
 function showContent($data) {
@@ -22,6 +21,14 @@ function showContent($data) {
         case 'home':
             include 'home.php';
             showHomeContent();
+            break;
+        case 'dinostaur':
+            include 'dinostaur.php';
+            showWsHomeContent($data);
+            break;
+        case 'details':
+            include 'dinostaur.php';
+            showDetailsContent($data);
             break;
         case 'about':
             include 'about.php';
@@ -31,7 +38,7 @@ function showContent($data) {
             include 'contact.php';
             showContactForm($data);
             break;
-        case 'received':
+        case 'contact_received':
             include 'contact.php';
             showReceived($data);
             break;
@@ -42,6 +49,14 @@ function showContent($data) {
         case 'register':
             include 'register.php';
             showRegistrationForm($data);
+            break;
+        case 'cart':
+            include 'cart.php';
+            showCartContent($data);
+            break;
+        case 'order received':
+            include 'cart.php';
+            showOrderReceived($data);
             break;
         default:
             showError('Page ['.$data['page'].'] not found.');

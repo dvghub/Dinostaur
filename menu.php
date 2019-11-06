@@ -4,10 +4,13 @@ function showMenu($data) {
     
     showMenuStart();
     showMenuItem('home', 'HOME', $page);
+    showMenuItem('dinostaur', 'DINOSTAUR', $page);
     showMenuItem('about', 'ABOUT', $page);
     showMenuItem('contact', 'CONTACT', $page);
     if (isUserLogged()) {
-        showMenuItem('logout', 'LOG OUT '.strtoupper(getLoggerUsername()), $page);
+        showMenuItem('logout', 'LOG OUT '.strtoupper(getUserByEmail(getLoggedEmail())['name']), $page);
+        $contents = cartExists() ? getAmountInCart() : 0;
+        showMenuItem('cart', 'CART (' . $contents . ' ITEMS)', $page);
     } else {
         showMenuItem('login', 'LOG IN', $page);
         showMenuItem('register', 'REGISTER', $page);
