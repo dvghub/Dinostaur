@@ -16,15 +16,12 @@ class User_Crud extends Crud {
         if (!$info) {
             return array('status' => 'user_unknown');
         } else {
-            if ($info['password'] != $password) {
-                return array('status' => 'password_incorrect');
-            } else {
+            if (password_verify($password, $info['password'])) {
                 return array('status' => 'all_good', 'name' => $info['name']);
+            } else {
+
+                return array('status' => 'password_incorrect');
             }
         }
-    }
-
-    public function getName() {
-        return 'User Crud.';
     }
 }

@@ -1,6 +1,7 @@
 <?php
+include_once 'ICrud.php';
 
-class Crud {
+class Crud implements ICrud {
     protected $conn;
 
     public function connect() {
@@ -16,7 +17,7 @@ class Crud {
         return $this;
     }
 
-    private function setup($sql, $params) {
+    public function setup($sql, $params) {
         $stmt = $this->conn->prepare($sql);
         foreach ($params as $key=>$value) {
             $stmt->bindValue($key, $value);
@@ -24,31 +25,27 @@ class Crud {
         return $stmt;
     }
 
-    protected function create($sql, $params) {
+    public function create($sql, $params) {
         $stmt = $this->setup($sql, $params);
         $stmt->execute();
         return $this->conn->lastInsertId();
     }
 
-    protected function read($sql, $params) {
+    public function read($sql, $params) {
         $stmt = $this->setup($sql, $params);
         $stmt->execute();
         return $stmt->fetchAll();
     }
 
-    protected function update($sql, $params) {
+    public function update($sql, $params) {
         $stmt = $this->setup($sql, $params);
         $stmt->execute();
         return $this->conn->lastInsertId();
     }
 
-    protected function delete($sql, $params) {
+    public function delete($sql, $params) {
         $stmt = $this->setup($sql, $params);
         return $stmt->execute();
-    }
-
-    public function getName() {
-        return 'Standard Crud.';
     }
 
     public function userByEmail($email) {

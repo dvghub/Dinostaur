@@ -1,4 +1,4 @@
-<?php 
+<?php //v7.3.9
 session_start();
 
 include 'session_manager.php';

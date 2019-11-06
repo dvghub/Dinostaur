@@ -75,8 +75,4 @@ class Store_Crud extends Crud {
             return false;
         }
     }
-
-    public function getName() {
-        return 'Store Crud.';
-    }
 }

@@ -73,7 +73,7 @@ class User_Model extends Model {
                     try {
                         $user = $this->db->userByEmail($this->email);
                         if (!$user) {
-                            if ($this->db->save($this->email, $this->name, $this->password)) {
+                            if ($this->db->save($this->email, $this->name, password_hash($this->password, PASSWORD_BCRYPT))) {
                                 $this->page = 'login';
                             } else {
                                 $this->error_name = "Something went wrong. Please try again.";
@@ -82,7 +82,7 @@ class User_Model extends Model {
                             $this->error_email = 'This email address is already in our database.';
                         }
                     } catch (Exception $e) {
-                        $this->alert = 'Connection to database failed. Please try again or contact the site\'s administrator.';
+                        $this->alert = $e->getMessage();    //'Connection to database failed. Please try again or contact the site\'s administrator.'
                     }
                 } else {
                     $this->error_password2 = 'Passwords do not match.';

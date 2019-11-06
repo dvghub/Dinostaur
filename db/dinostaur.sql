@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 25, 2019 at 02:59 AM
+-- Generation Time: Oct 25, 2019 at 06:04 AM
 -- Server version: 8.0.17
 -- PHP Version: 7.3.9
 
@@ -179,10 +179,10 @@ INSERT INTO `products` (`id`, `name`, `image`, `price`, `description`, `tags`) V
 --
 
 CREATE TABLE `users` (
-  `id` int(5) NOT NULL,
+  `id` int(11) NOT NULL,
   `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `password` varchar(20) NOT NULL,
+  `password` varchar(72) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -191,23 +191,24 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `name`, `password`, `admin`) VALUES
-(1, 'name@email.com', 'name', 'password', 1),
-(2, 'staff@ethlan.fr', 'imval', 'hackmeifyoucan', 0),
-(3, 'entry@email.com', 'third entry', 'goodpassword', 0),
-(4, 'fourth.entry@email.com', 'fourth entry', 'supergoodpassword', 0),
-(5, 'error@test.com', 'error test', 'error', 0),
-(6, 'reggy@test.com', 'reggy', 'p4ss', 0),
-(7, 'tester@email.com', 'tester one', 'password', 0),
-(8, 'nernjrn@nruvnrei.ru', 'erjvwigbi', 'p4ss', 0),
-(9, 'a@a.a', 'a', 'a', 0),
-(10, 'trogg@good.music', 'trogg', 'wildthing', 0),
-(11, 'test@email.com', 'test', 'test', 0),
-(12, 'b@b.b', 'b', 'b', 0),
-(13, 'namename@email.com', 'name', 'password', 0),
-(14, 'uwecu@nvrun.gnri', 'wueuowb', 'pass', 0),
-(15, 'person@email.com', 'new person', 'fantasticpassword', 0),
-(16, 'justin@solid-optics.eu', 'Michel', 'putetete', 0),
-(17, 'road@runner.com', 'road runner', 'meepmeep', 0);
+(1, 'name@email.com', 'name', '$2a$10$MD7lISpvkPoCYqBgcQdp6OSVZwdh8d0qYmUZhFZRbgxXkyxGFWevu', 1),
+(2, 'staff@ethlan.fr', 'imval', '$2a$10$EUL.EpbioXOl04c2Piyj/.KJf9BOreyuKv2VifkHv/XLFnrra0bru', 0),
+(3, 'entry@email.com', 'third entry', '$2a$10$tfS/NhiPw.d9gXcaPrktJuBqLqZ.vmbvPbysEyhgUIOgmocxPTJrm', 0),
+(4, 'fourth.entry@email.com', 'fourth entry', '$2a$10$xLJej08GozzCfiB5CSmcNun8IWduAM4SOWjLhFtgsVkfih6tcw0.a', 0),
+(5, 'error@test.com', 'error test', '$2a$10$xcs6xpPKYQcaK147Bn6uxOixDjVUO6P6zCk/8F8sr1ickbPUTgnrq', 0),
+(6, 'reggy@test.com', 'reggy', '$2a$10$890sZTG5rWgaI9/1.32yy.vo2TXA3Y6zF82ZNgdXQu7QHF/sdCAMi', 0),
+(7, 'tester@email.com', 'tester one', '$2a$10$/G.5YdOrmuyGm9C4OtIVQO5WaOLieHV8Oebmyk9lD9DrElMH7uaS6', 0),
+(8, 'nernjrn@nruvnrei.ru', 'erjvwigbi', '$2a$10$890sZTG5rWgaI9/1.32yy.vo2TXA3Y6zF82ZNgdXQu7QHF/sdCAMi', 0),
+(9, 'a@a.a', 'a', '$2a$10$6FV0/lPSjUjUDhSCcXrmY.LldlZfknHAFUfBj0O5JYXH.BtJpFvny', 0),
+(10, 'trogg@good.music', 'trogg', '$2a$10$8H2z4a0STlbteTzU1xiPWu6iEB.jkyYF4A/7WUvulHg2t/s8YPJiy', 0),
+(11, 'test@email.com', 'test', '$2a$10$PZIlP.HA39wgAJGGJP3aIu.RKPVdC2ZXI/RbSecgyWd5XDAYm6lg.', 0),
+(12, 'b@b.b', 'b', '$2a$10$sb4E446XA6EhetPmsMEu.up4cyFvMEwtD8jE2Fbx9qnAcrhbR6uyC', 0),
+(13, 'namename@email.com', 'name', '$2a$10$0Mm5T8FmVOyNoou4Li3Yxunr9dJ6FlfmHtsNDGpMK32tRuVWU0Dn2', 0),
+(14, 'uwecu@nvrun.gnri', 'wueuowb', '$2a$10$5YTvu0rj08hwHRl1bMl7DuZFJAZRLd9jiozg9fopqqzRK2x17YiWq', 0),
+(15, 'person@email.com', 'new person', '$2a$10$VcFgz1vGqSrsQxKfCNUojOasfgHQE2KOC9AYNo3/zvZdHGksM4vQ6', 0),
+(16, 'justin@solid-optics.eu', 'Michel', '$2a$10$Ey7sDxqEWGBSd.cNNkx8NePK3vDM0jsMD2RVkzi8qlxBo95Irbx5W', 0),
+(17, 'road@runner.com', 'road runner', '$2a$10$yeUE7WWcwzfGl8a6RAxJrevW3nh7MbWaZybncfJBRqLlMnQNb3Zba', 0),
+(18, 'aegus@v.com', 'aegus', '$2y$10$CE6bLXEp23gy0MSsYWT7b.4bfSq1gY3XagqEj/7kPrabUOc2aQMFa', 0);
 
 --
 -- Indexes for dumped tables
@@ -263,7 +264,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
