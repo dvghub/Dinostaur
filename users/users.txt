@@ -1,0 +1,6 @@
+name@email.com|name|password
+bill.parker@email.com|bill parker|g00dp4ssw0rd
+a@a|a|a
+reg@email.com|new reg|password
+mcgee@email.com|logger mcgee|p4ss
+test@email.com|test|password

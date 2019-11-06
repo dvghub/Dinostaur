@@ -1,20 +1,33 @@
 <?php 
-require 'begin_html.php';
-require 'head.php';
+session_start();
+
+require 'html.php';
 require 'body.php';
-require 'end_html.php';
+require 'manager_manager.php';
 
 $data = getRequestData();
 showRequestedPage($data);
 
 function getRequestData() {
     $request_type = $_SERVER['REQUEST_METHOD'];
+    $name = '';
+    $username = '';
+    $email = '';
+    $message = '';
+    $password = '';
+    $password2 = '';
     if ($request_type == 'POST') {
-        $requested_page = getPostVar('page', 'home');
+        $requested_page = testInput(getPostVar('page', 'home'));
+        $name = testInput(getPostVar('name', ''));
+        $username = testInput(getPostVar('username', ''));
+        $email = testInput(getPostVar('email', ''));
+        $message = testInput(getPostVar('message', ''));
+        $password = testInput(getPostVar('password', ''));
+        $password2 = testInput(getPostVar('password2', ''));
     } else {
-        $requested_page = getUrlVar('page', 'home');
+        $requested_page = testInput(getUrlVar('page', 'home'));
     }
-    return array('page'=>$requested_page, 'type'=>$request_type);
+    return array('page'=>$requested_page, 'type'=>$request_type, 'name'=>$name, 'username'=>$username, 'email'=>$email, 'message'=>$message, 'password'=>$password, 'password2'=>$password2);
 }
 
 function showRequestedPage($data) {
@@ -34,6 +47,9 @@ function getUrlVar($key, $default='') {
     return isset($value) ? $value : $default;
 }
 
-
-
-    
+function testInput($data) {
+  $data = trim($data);
+  $data = addslashes($data);
+  $data = htmlentities($data);
+  return $data;
+}
