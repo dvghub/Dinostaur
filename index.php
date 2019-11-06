@@ -180,10 +180,82 @@ function process($data) {
 }
 
 function showRequestedPage($data) {
-    beginDocument();
-    showHeadSection();
-    showBodySection($data);
-    endDocument();
+    switch ($data['page']) {
+        case 'home':
+            include_once "home_doc.php";
+            $doc = new Home_Doc($data);
+            $doc->show();
+            break;
+        case 'top':
+            include 'top_doc.php';
+            $doc = new Top_Doc($data);
+            $doc->show();
+            break;
+        case 'dinostaur':
+            include 'dinostaur_doc.php';
+            $doc = new Dinostaur_Doc($data);
+            $doc->show();
+            break;
+        case 'details':
+            include 'details_doc.php';
+            $doc = new Details_Doc($data);
+            $doc->show();
+            break;
+        case 'about':
+            include 'about_doc.php';
+            $doc = new About_Doc($data);
+            $doc->show();
+            break;
+        case 'contact':
+            include 'contact_doc.php';
+            $doc = new Contact_Doc($data);
+            $doc->show();
+            break;
+        case 'contact_received':
+            include 'contact_received_doc.php';
+            $doc = new Contact_Received_Doc($data);
+            $doc->show();
+            break;
+        case 'login':
+            include 'login_doc.php';
+            $doc = new Login_Doc($data);
+            $doc->show();
+            break;
+        case 'register':
+            include 'register_doc.php';
+            $doc = new Register_Doc($data);
+            $doc->show();
+            break;
+        case 'upload':
+            include 'upload_doc.php';
+            $doc = new Upload_Doc($data);
+            $doc->show();
+            break;
+        case 'upload succeeded':
+            include 'upload_succeeded_doc.php';
+            $doc = new Upload_Succeeded_Doc($data);
+            $doc->show();
+            break;
+        case 'cart':
+            include 'cart_doc.php';
+            $doc = new Cart_Doc($data);
+            $doc->show();
+            break;
+        case 'order received':
+            include 'cart_received_doc.php';
+            $doc = new Cart_Received_Doc($data);
+            $doc->show();
+            break;
+        default:
+            include 'error_doc.php';
+            $doc = new Error_Doc($data);
+            $doc->show();
+            break;
+    }
+//    beginDocument();
+//    showHeadSection();
+//    showBodySection($data);
+//    endDocument();
 }
 
 function getPostVar($key, $default='') {
