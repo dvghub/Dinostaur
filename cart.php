@@ -9,28 +9,24 @@ function showCartContent($data) {
 //    echo '</pre>';
 
     if (cartExists()) {
-        if ($data['cart_empty']) {
-            showMessage('Please add items to your cart before ordering.');
-        } else {
-            $items = getCart();
+        $items = getCart();
 
-            showFormStart($data['page']);
-            foreach ($items as $id=>$amount) {
-                if (!empty($data['amounts'])) {
-                    $quantity = $data['amounts'][$id];
-                } else {
-                    $quantity = $amount;
-                }
-                $product = getProduct($id);
-                $total += $quantity * $product['price'];
-                showProduct($product, $quantity, $id);
+        showFormStart($data['page']);
+        foreach ($items as $id=>$amount) {
+            if (!empty($data['amounts'])) {
+                $quantity = $data['amounts'][$id];
+            } else {
+                $quantity = $amount;
             }
-            echo "<span id='cart-total'>Your total: &euro;".$total."</span>";
-
-            showFormEnd('update-prices', 'UPDATE PRICES');
-
-            showOrder('order received', $items, $total, getUserByEmail(getLoggedEmail())['id']);
+            $product = getProduct($id);
+            $total += $quantity * $product['price'];
+            showProduct($product, $quantity, $id);
         }
+        echo "<span id='cart-total'>Your total: &euro;".$total."</span>";
+
+        showFormEnd('update-prices', 'UPDATE PRICES');
+
+        showOrder('order received', $items, $total, getUserByEmail(getLoggedEmail())['id']);
     } else {
         showMessage('Please add items to your cart.');
     }

@@ -60,6 +60,10 @@ function getProduct($id) {
     }
 }
 
+function getTop($howmany) {
+    return getMostSold($howmany);
+}
+
 function saveOrder($total, $products, $customer_id) {
     return saveOrdered($total, $products, $customer_id);
 }

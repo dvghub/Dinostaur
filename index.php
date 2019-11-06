@@ -8,8 +8,8 @@ include 'manager_manager.php';
 include 'session_manager.php';
 
 $data = getRequestData();
-$pdata = process($data);
-showRequestedPage($pdata);
+$data = process($data);
+showRequestedPage($data);
 
 function getRequestData() {
     $request_type = $_SERVER['REQUEST_METHOD'];
@@ -37,7 +37,7 @@ function getRequestData() {
         $password = '';
         $password2 = '';
         $category = 'all';
-        $product_id = -1;
+        $product_id = testInput(getUrlVar('product_id', -1));
         $product_name = '';
         $amount = 0;
         $amounts = array();

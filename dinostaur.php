@@ -78,9 +78,9 @@ function showProducts($cols) {
         foreach ($col as $article) {
             echo $article;
         }
-        echo    "</div>";
+        echo    '</div>';
     }
-    echo "</div>";
+    echo '</div>';
 }
 
 function showDetailsContent($data) {
@@ -88,14 +88,18 @@ function showDetailsContent($data) {
 
     echo "
     <img class='page-img' src='".$product['image']."'>
+    <span class='page-description'>" .$product['description']. "</span>
+    <span class='page-price'>&euro;" .$product['price']. "</span>";
+    if (isUserLogged()) {
+        echo "
     <form action='index.php' method='post'>
         <input type='hidden' name='product_id' value='".$product['id']."'>
         <input type='hidden' name='product_name' value='".$product['name']. "'>
         <input type='hidden' name='page' value='order'>
-        <span class='page-description'>" .$product['description']. "</span>
-        <span class='page-price'>&euro;" .$product['price']. "</span>
         <input type='number' name='amount' min='1' value='1' class='page-amount'>
         <input type='submit' value='ORDER' class='page-order'>
-    </form>
-    ";
+    </form>";
+    } else {
+        echo '<span class="page-description">Please log in to purchase.</span>';
+    }
 }

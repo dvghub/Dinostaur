@@ -46,19 +46,33 @@ function getProductByCat($category) {
 
 function getProductByID($id) {
     $db = connect();
-    $id= mysqli_real_escape_string($db, $id);
+    $id = mysqli_real_escape_string($db, $id);
     $sql = 'SELECT * FROM products WHERE id="'.$id.'"';
-    $result = mysqli_query($db, $sql);
-    $result = mysqli_fetch_assoc($result);
+    $result = mysqli_fetch_assoc(mysqli_query($db, $sql));
     mysqli_close($db);
     return $result;
+}
+
+function getMostSold($howmany) {
+    $db = connect();
+    $sql = "SELECT order_products.product_id, SUM(order_products.product_amount) AS total, products.name 
+            FROM order_products 
+            LEFT JOIN products ON order_products.product_id = products.id 
+            WHERE order_products.order_id IN (SELECT orders.id FROM orders WHERE orders.date >= ADDDATE(CURRENT_DATE(), INTERVAL -1 WEEK)) 
+            GROUP BY order_products.product_id 
+            ORDER BY total DESC 
+            LIMIT " . $howmany;
+    $result = mysqli_fetch_all(mysqli_query($db, $sql), MYSQLI_ASSOC);
+    mysqli_close($db);
+    return $result;
+
 }
 
 function saveOrdered($total, $products, $customer_id) {
     $db = connect();
     $total = mysqli_real_escape_string($db, $total);
     $customer_id = mysqli_real_escape_string($db, $customer_id);
-    $sql = "INSERT INTO orders (total_price, customer_id) VALUES (".$total.", ".$customer_id.")";
+    $sql = "INSERT INTO orders (total_price, customer_id, date) VALUES (".$total.", ".$customer_id.", CURRENT_DATE())";
     mysqli_query($db, $sql);
     $order_id = mysqli_insert_id($db);
     foreach ($products as $id=>$amount) {
